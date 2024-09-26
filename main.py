@@ -3,9 +3,9 @@ from fastapi import FastAPI
 app = FastAPI()
 
 ESTUDIANTES = [
-    {'nombre': 'Didier', 'apellidos': 'Irias Mendez'}, 
-    {'nombre': 'Alonso', 'Apellidos': 'Solano Soto'},
-    {'nombre': 'Pedro', 'Apellidos': 'Mendez'}
+    {'id': 1, 'nombre': 'Didier', 'apellidos': 'Irias Mendez'}, 
+    {'id': 2,'nombre': 'Alonso', 'Apellidos': 'Solano Soto'},
+    {'id': 3,'nombre': 'Pedro', 'Apellidos': 'Mendez'}
     ]
 
 @app.get("/")
@@ -27,6 +27,20 @@ async def mostrar_estudiante(nombre_estudiante):
         if estudiante.get('nombre').lower() == nombre_estudiante.lower():
             return estudiante
     return {'error': 'El estudiante no existe'}
+
+# parametros de tipo path / endpoints
+@app.get("/hola_mundo/{persona}")
+async def hola_mundo(persona):
+    return f'Hola {persona}'
+
+@app.delete('/estudiantes/{id_estudiante}')
+async def borrar_estudiante(id_estudiante):
+    for estudiante in ESTUDIANTES:
+        if estudiante.get('id') == int(id_estudiante):
+            ESTUDIANTES.pop(ESTUDIANTES.index(estudiante))
+            return {'message': 'estudiante eliminado', 'data': ESTUDIANTES}
+    return {'error': 'El estudiante no existe'}
+
 
 #return = devolver
 #lowercase = Minuscula
